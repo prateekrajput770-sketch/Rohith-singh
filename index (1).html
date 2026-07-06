@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rohith Kumar Singh | Cameraman</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* ────────────────────────────────────────
+       VARIABLES & RESET
+    ──────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-void:       #07090d;
+      --bg-deep:       #0d1118;
+      --bg-card:       #131b24;
+      --bg-card-hov:   #192433;
+      --accent:        #c9a84c;
+      --accent-bright: #e8c96a;
+      --accent-dim:    rgba(201,168,76,0.10);
+      --accent-bdr:    rgba(201,168,76,0.20);
+      --text-bright:   #f0ede6;
+      --text-body:     #8fa0b4;
+      --text-muted:    #4e5f72;
+      --font-display:  'Bebas Neue', sans-serif;
+      --font-body:     'Inter', sans-serif;
+      --font-mono:     'Space Mono', monospace;
+      --radius:        12px;
+      --ease:          0.3s ease;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-void);
+      color: var(--text-bright);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    section { scroll-margin-top: 80px; }
+
+    /* ────────────────────────────────────────
+       SCROLL PROGRESS BAR
+    ──────────────────────────────────────── */
+    #progress-bar {
+      position: fixed; top: 0; left: 0; height: 3px; z-index: 9999;
+      background: linear-gradient(to right, var(--accent), var(--accent-bright));
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+
+    /* ────────────────────────────────────────
+       NAVBAR
+    ──────────────────────────────────────── */
+    .navbar {
+      position: fixed; top: 3px; left: 0; right: 0;
+      z-index: 1000;
+      padding: 22px 0;
+      transition: all 0.4s ease;
+    }
+    .navbar.scrolled {
+      background: rgba(7,9,13,0.94);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(201,168,76,0.08);
+    }
+    .nav-container {
+      max-width: 1200px; margin: 0 auto; padding: 0 36px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .nav-logo {
+      display: flex; flex-direction: column; line-height: 1;
+    }
+    .logo-text {
+      font-family: var(--font-display);
+      font-size: 30px; letter-spacing: 4px; color: var(--accent);
+    }
+    .logo-sub {
+      font-family: var(--font-mono); font-size: 9px;
+      letter-spacing: 3px; color: var(--text-muted);
+      text-transform: uppercase;
+    }
+    .nav-links {
+      display: flex; list-style: none; gap: 38px;
+    }
+    .nav-link {
+      font-size: 12px; font-weight: 600; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--text-body);
+      transition: color var(--ease); position: relative;
+    }
+    .nav-link::after {
+      content: ''; position: absolute; bottom: -4px; left: 0;
+      width: 0; height: 1px; background: var(--accent);
+      transition: width var(--ease);
+    }
+    .nav-link:hover, .nav-link.active { color: var(--accent); }
+    .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer;
+      padding: 4px; position: relative; z-index: 1002;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 2px;
+      background: var(--text-bright);
+      transition: all 0.3s ease; transform-origin: center;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    @media (max-width: 768px) {
+      .hamburger { display: flex; }
+      .nav-links {
+        display: none;
+        flex-direction: column; gap: 44px;
+        position: fixed; inset: 0; z-index: 1001;
+        background: rgba(7,9,13,0.97);
+        justify-content: center; align-items: center;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links.open .nav-link { font-size: 20px; letter-spacing: 4px; }
+    }
+
+    /* ────────────────────────────────────────
+       HERO
+    ──────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      position: relative;
+      display: flex; align-items: center;
+      background: radial-gradient(ellipse at 65% 50%, #182030 0%, #0d1118 45%, #07090d 100%);
+      overflow: hidden;
+    }
+    /* Subtle grid */
+    .hero::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(201,168,76,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,168,76,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    /* Glow orb */
+    .hero::after {
+      content: ''; position: absolute;
+      width: 500px; height: 500px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
+      right: 10%; top: 50%; transform: translateY(-50%);
+      pointer-events: none;
+    }
+    .hero-inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 36px;
+      padding-top: 90px;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 64px; align-items: center; width: 100%;
+      position: relative; z-index: 1;
+    }
+    .hero-eyebrow {
+      font-family: var(--font-mono); font-size: 11px;
+      letter-spacing: 3px; color: var(--accent); opacity: 0.8;
+      margin-bottom: 18px;
+    }
+    .hero-name {
+      font-family: var(--font-display);
+      font-size: clamp(60px, 7.5vw, 96px);
+      line-height: 0.92; letter-spacing: 3px;
+      color: var(--text-bright); margin-bottom: 28px;
+    }
+    .hero-name em { font-style: normal; color: var(--accent); }
+
+    .hero-typing {
+      display: flex; align-items: center; gap: 6px;
+      font-family: var(--font-mono); font-size: 15px;
+      margin-bottom: 24px;
+    }
+    .hero-iam { color: var(--text-muted); }
+    .typed-word { color: var(--accent); font-weight: 700; }
+    .cursor-blink {
+      display: inline-block; width: 2px; height: 16px;
+      background: var(--accent); vertical-align: middle;
+      animation: blink 0.9s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .hero-bio {
+      font-size: 15px; color: var(--text-body); line-height: 1.75;
+      max-width: 460px; margin-bottom: 36px;
+    }
+    .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    .btn-gold {
+      padding: 13px 32px; background: var(--accent);
+      color: #07090d; font-weight: 700; font-size: 12px;
+      letter-spacing: 2px; text-transform: uppercase;
+      border-radius: 4px; transition: all var(--ease); display: inline-block;
+    }
+    .btn-gold:hover {
+      background: var(--accent-bright);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(201,168,76,0.28);
+    }
+    .btn-outline {
+      padding: 12px 32px; border: 1px solid var(--accent-bdr);
+      color: var(--accent); font-size: 12px; letter-spacing: 2px;
+      text-transform: uppercase; font-weight: 600;
+      border-radius: 4px; transition: all var(--ease); display: inline-block;
+    }
+    .btn-outline:hover {
+      background: var(--accent-dim);
+      transform: translateY(-2px);
+    }
+    .hero-mini-stats {
+      display: flex; gap: 0; margin-top: 44px;
+    }
+    .hms-item {
+      text-align: center; padding: 0 28px;
+      border-right: 1px solid rgba(201,168,76,0.12);
+    }
+    .hms-item:first-child { padding-left: 0; }
+    .hms-item:last-child { border-right: none; }
+    .hms-num {
+      font-family: var(--font-display); font-size: 36px;
+      color: var(--accent); line-height: 1; display: block;
+    }
+    .hms-lbl {
+      font-size: 10px; color: var(--text-muted);
+      letter-spacing: 1.5px; text-transform: uppercase; display: block;
+    }
+
+    /* ── Photo ── */
+    .hero-photo-side {
+      display: flex; justify-content: center; align-items: center;
+    }
+    .photo-wrap {
+      position: relative;
+      width: 300px; height: 300px;
+    }
+    /* Outer rotating ring */
+    .ring-outer {
+      position: absolute;
+      width: 380px; height: 380px;
+      top: -40px; left: -40px;
+      animation: ringRotate 28s linear infinite;
+    }
+    /* Inner counter-rotating ring */
+    .ring-inner {
+      position: absolute;
+      width: 326px; height: 326px;
+      top: -13px; left: -13px;
+      animation: ringRotate 18s linear infinite reverse;
+    }
+    @keyframes ringRotate { to { transform: rotate(360deg); } }
+
+    .photo-circle {
+      position: absolute; inset: 0;
+      border-radius: 50%; overflow: hidden;
+      border: 3px solid var(--accent);
+      box-shadow:
+        0 0 0 1px rgba(201,168,76,0.12),
+        0 0 50px rgba(201,168,76,0.12),
+        inset 0 0 30px rgba(0,0,0,0.4);
+    }
+    .profile-photo {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center top;
+    }
+    /* Fallback if image missing */
+    .photo-circle::before {
+      content: '🎥';
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 64px; background: var(--bg-card);
+      z-index: -1;
+    }
+    .cam-badge {
+      position: absolute; bottom: -6px; right: -6px;
+      width: 58px; height: 58px; border-radius: 50%;
+      background: var(--bg-card); border: 2px solid var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.5),
+                  0 0 12px rgba(201,168,76,0.15);
+    }
+
+    /* Scroll hint */
+    .scroll-hint {
+      position: absolute; bottom: 36px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center;
+      gap: 8px; color: var(--text-muted);
+      font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    }
+    .scroll-chevron {
+      width: 20px; height: 20px;
+      border-right: 1px solid var(--accent);
+      border-bottom: 1px solid var(--accent);
+      transform: rotate(45deg);
+      animation: chevBounce 1.8s ease infinite;
+    }
+    @keyframes chevBounce {
+      0%,100% { opacity: 0.3; transform: rotate(45deg) translateY(-3px); }
+      50%      { opacity: 1;   transform: rotate(45deg) translateY(3px);  }
+    }
+
+    /* ────────────────────────────────────────
+       SECTION SCAFFOLD
+    ──────────────────────────────────────── */
+    .sec {
+      position: relative;
+    }
+    .sec-dark  { background: var(--bg-void); }
+    .sec-deep  { background: var(--bg-deep); }
+
+    .sec-inner {
+      max-width: 1200px; margin: 0 auto;
+      padding: 100px 36px;
+    }
+    .sec-head {
+      text-align: center; margin-bottom: 64px;
+    }
+    .eyebrow {
+      display: block;
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 4px; color: var(--accent);
+      text-transform: uppercase; margin-bottom: 12px; opacity: 0.8;
+    }
+    .sec-title {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 5vw, 56px);
+      letter-spacing: 2px; color: var(--text-bright);
+      display: inline-flex; align-items: center; gap: 20px;
+    }
+    .sec-title::before, .sec-title::after {
+      content: ''; width: 56px; height: 1px;
+    }
+    .sec-title::before { background: linear-gradient(to right, transparent, var(--accent)); }
+    .sec-title::after  { background: linear-gradient(to left,  transparent, var(--accent)); }
+
+    /* ────────────────────────────────────────
+       ABOUT
+    ──────────────────────────────────────── */
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 60px; align-items: start;
+    }
+    .about-lead {
+      font-size: 16px; color: var(--text-body);
+      line-height: 1.8; margin-bottom: 32px;
+    }
+    .detail-list { display: flex; flex-direction: column; gap: 12px; }
+    .detail-row {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 14px 18px;
+      background: var(--bg-card);
+      border: 1px solid var(--accent-bdr);
+      border-radius: 8px;
+      transition: all var(--ease);
+    }
+    .detail-row:hover {
+      border-color: rgba(201,168,76,0.38);
+      background: var(--bg-card-hov);
+      transform: translateX(4px);
+    }
+    .d-icon { font-size: 17px; flex-shrink: 0; margin-top: 1px; }
+    .d-label {
+      font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--text-muted); font-weight: 500; margin-bottom: 3px;
+    }
+    .d-val { font-size: 14px; color: var(--text-bright); }
+
+    .stats-row {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 18px; margin-bottom: 28px;
+    }
+    .stat-box {
+      background: var(--bg-card);
+      border: 1px solid var(--accent-bdr);
+      border-radius: var(--radius);
+      padding: 28px 18px; text-align: center;
+      position: relative; overflow: hidden;
+      transition: all var(--ease);
+    }
+    .stat-box::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(to right, transparent, var(--accent), transparent);
+    }
+    .stat-box:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 14px 36px rgba(0,0,0,0.5);
+      border-color: rgba(201,168,76,0.4);
+    }
+    .stat-num {
+      font-family: var(--font-display); font-size: 52px;
+      color: var(--accent); line-height: 1; display: block; margin-bottom: 8px;
+    }
+    .stat-lbl {
+      font-size: 10px; color: var(--text-muted);
+      letter-spacing: 1px; text-transform: uppercase; line-height: 1.6;
+    }
+
+    /* ────────────────────────────────────────
+       EXPERIENCE
+    ──────────────────────────────────────── */
+    .timeline {
+      position: relative; max-width: 900px; margin: 0 auto;
+    }
+    .timeline::before {
+      content: ''; position: absolute;
+      left: 24px; top: 12px; bottom: 12px; width: 1px;
+      background: linear-gradient(to bottom, var(--accent) 0%, rgba(201,168,76,0.1) 100%);
+    }
+    .t-item {
+      display: flex; gap: 40px; margin-bottom: 44px;
+      position: relative;
+    }
+    .t-dot-col { flex-shrink: 0; width: 48px; }
+    .t-dot {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: var(--bg-card); border: 2px solid var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; position: relative; z-index: 1;
+      box-shadow: 0 0 18px rgba(201,168,76,0.18);
+      transition: all var(--ease);
+    }
+    .t-item:hover .t-dot {
+      background: var(--accent-dim);
+      box-shadow: 0 0 28px rgba(201,168,76,0.3);
+    }
+    .t-card {
+      flex: 1;
+      background: var(--bg-card);
+      border: 1px solid var(--accent-bdr);
+      border-radius: var(--radius); padding: 28px 32px;
+      transition: all 0.35s ease;
+    }
+    .t-card:hover {
+      border-color: rgba(201,168,76,0.4);
+      transform: translateX(8px);
+      box-shadow: -3px 0 0 var(--accent), 0 8px 32px rgba(0,0,0,0.45);
+    }
+    .t-top {
+      display: flex; justify-content: space-between;
+      align-items: flex-start; gap: 12px; flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .t-company {
+      font-family: var(--font-display); font-size: 24px;
+      letter-spacing: 1.5px; color: var(--text-bright); margin-bottom: 4px;
+    }
+    .t-role {
+      font-size: 11px; color: var(--accent); letter-spacing: 2px;
+      text-transform: uppercase; font-weight: 600;
+    }
+    .t-date {
+      font-family: var(--font-mono); font-size: 11px;
+      color: var(--text-muted); padding: 4px 12px;
+      border: 1px solid rgba(201,168,76,0.18); border-radius: 20px;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .t-desc {
+      font-size: 14px; color: var(--text-body); line-height: 1.75;
+      margin-bottom: 18px;
+    }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag {
+      font-size: 11px; padding: 4px 12px;
+      background: var(--accent-dim); color: var(--accent);
+      border: 1px solid var(--accent-bdr); border-radius: 20px;
+      letter-spacing: 0.5px; font-weight: 500;
+    }
+
+    /* ────────────────────────────────────────
+       SKILLS
+    ──────────────────────────────────────── */
+    .skills-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 28px; max-width: 900px; margin: 0 auto;
+    }
+    .skill-card {
+      background: var(--bg-card);
+      border: 1px solid var(--accent-bdr);
+      border-radius: var(--radius); padding: 24px 28px;
+      transition: all var(--ease);
+    }
+    .skill-card:hover {
+      border-color: rgba(201,168,76,0.4);
+      transform: translateY(-4px);
+      box-shadow: 0 14px 36px rgba(0,0,0,0.45);
+    }
+    .sk-top {
+      display: flex; align-items: center;
+      justify-content: space-between; margin-bottom: 14px;
+    }
+    .sk-left { display: flex; align-items: center; gap: 12px; }
+    .sk-icon { font-size: 22px; }
+    .sk-name { font-size: 14px; font-weight: 600; color: var(--text-bright); }
+    .sk-pct {
+      font-family: var(--font-mono); font-size: 14px;
+      color: var(--accent); font-weight: 700;
+    }
+    .sk-bar {
+      height: 4px; background: rgba(255,255,255,0.06);
+      border-radius: 2px; overflow: hidden;
+    }
+    .sk-fill {
+      height: 100%; width: 0%;
+      background: linear-gradient(to right, var(--accent), var(--accent-bright));
+      border-radius: 2px;
+      transition: width 1.3s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    /* ────────────────────────────────────────
+       EDUCATION
+    ──────────────────────────────────────── */
+    .edu-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 24px; max-width: 800px;
+      margin: 0 auto 64px;
+    }
+    .edu-card {
+      background: var(--bg-card);
+      border: 1px solid var(--accent-bdr);
+      border-radius: var(--radius); padding: 32px 28px;
+      display: flex; gap: 20px; align-items: flex-start;
+      position: relative; overflow: hidden;
+      transition: all var(--ease);
+    }
+    .edu-card::after {
+      content: ''; position: absolute;
+      bottom: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(to right, transparent, var(--accent), transparent);
+      transform: scaleX(0); transform-origin: center;
+      transition: transform 0.4s ease;
+    }
+    .edu-card:hover::after { transform: scaleX(1); }
+    .edu-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 18px 44px rgba(0,0,0,0.5);
+      border-color: rgba(201,168,76,0.35);
+    }
+    .edu-icon { font-size: 38px; line-height: 1; flex-shrink: 0; }
+    .edu-badge {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 8px;
+    }
+    .edu-school {
+      font-family: var(--font-display); font-size: 20px;
+      letter-spacing: 1px; color: var(--text-bright); margin-bottom: 6px;
+    }
+    .edu-loc { font-size: 13px; color: var(--text-muted); }
+
+    /* Languages */
+    .lang-section { max-width: 800px; margin: 0 auto; }
+    .lang-heading {
+      font-family: var(--font-display); font-size: 26px;
+      letter-spacing: 3px; color: var(--text-bright);
+      text-align: center; margin-bottom: 32px;
+    }
+    .lang-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    }
+    .lang-card {
+      background: var(--bg-card);
+      border: 1px solid var(--accent-bdr);
+      border-radius: var(--radius); padding: 24px 18px;
+      text-align: center; transition: all var(--ease);
+    }
+    .lang-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(201,168,76,0.4);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+   box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+    }
+    .lang-flag { font-size: 32px; margin-bottom: 10px; }
+    .lang-name {
+      font-size: 14px; font-weight: 600;
+      color: var(--text-bright); margin-bottom: 12px;
+    }
+    .lang-pips { display: flex; justify-content: center; gap: 6px; }
+    .pip {
+      width: 9px; height: 9px; border-radius: 50%;
+      border: 1px solid var(--accent);
+    }
+    .pip.on { background: var(--accent); }
+
+    /* ────────────────────────────────────────
+       CONTACT
+    ──────────────────────────────────────── */
+    .contact-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 24px; max-width: 900px; margin: 0 auto;
+    }
+    .contact-card {
+      background: var(--bg-card);
+      border: 1px solid var(--accent-bdr);
+      border-radius: var(--radius); padding: 44px 28px;
+      text-align: center; position: relative; overflow: hidden;
+      transition: all var(--ease);
+    }
+    .contact-card::before {content: ''; position: absolute; inset: 0;
+      background: var(--accent-dim);
+      transform: scaleY(0); transform-origin: bottom;
+      transition: transform 0.4s ease;
+    }
+    .contact-card:hover::before { transform: scaleY(1); }
+    .contact-card:hover {
+      border-color: rgba(201,168,76,0.5);
+      transform: translateY(-8px);
+      box-shadow: 0 22px 52px rgba(0,0,0,0.55);
+    }
+    .cc-icon-wrap {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: var(--accent-dim); border: 1px solid var(--accent-bdr);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; margin: 0 auto 20px;
+      position: relative; z-index: 1;
+      transition: all var(--ease);
+    }
+    .contact-card:hover .cc-icon-wrap {
+      background: rgba(201,168,76,0.25);
+      box-shadow: 0 0 20px rgba(201,168,76,0.25);
+    }
+    .cc-type {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 2.5px; color: var(--accent);
+      text-transform: uppercase; margin-bottom: 8px;
+      position: relative; z-index: 1;
+    }
+    .cc-val {
+      font-size: 14px; color: var(--text-body);
+      line-height: 1.65; position: relative; z-index: 1;
+    }
+
+    /* ────────────────────────────────────────
+       FOOTER
+    ──────────────────────────────────────── */
+    .footer {
+      background: #040609;
+      padding: 48px 36px;
+      text-align: center;
+      border-top: 1px solid rgba(201,168,76,0.07);
+    }
+    .footer-name {
+      font-family: var(--font-display); font-size: 30px;
+      letter-spacing: 5px; color: var(--accent); margin-bottom: 6px;
+    }
+    .footer-tagline {
+      font-size: 11px; color: var(--text-muted);
+      letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 28px;
+    }
+    .footer-nav {
+      display: flex; justify-content: center; gap: 28px;
+      list-style: none; margin-bottom: 28px;
+    }
+    .footer-nav a {
+      font-size: 11px; color: var(--text-muted);
+      letter-spacing: 1.5px; text-transform: uppercase;
+      transition: color var(--ease);
+    }
+    .footer-nav a:hover { color: var(--accent); }
+    .footer-copy { font-size: 12px; color: var(--text-muted); }
+
+    /* ────────────────────────────────────────
+       SCROLL REVEAL
+    ──────────────────────────────────────── */
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.in-view { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: 0.1s; }
+    .reveal-d2 { transition-delay: 0.2s; }
+    .reveal-d3 { transition-delay: 0.3s; }
+
+    /* ────────────────────────────────────────
+       RESPONSIVE
+    ────────────────────────────────────@media (max-width: 1024px) {
+      .hero-inner {
+        grid-template-columns: 1fr;
+        text-align: center; gap: 48px;
+      }
+      .hero-btns { justify-content: center; }
+      .hero-bio  { margin: 0 auto 36px; }
+      .hero-mini-stats { justify-content: center; }
+
+      .about-grid {
+        grid-template-columns: 1fr; gap: 40px;
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr; max-width: 400px;
+      }
+    }
+
+    @media (max-width: 768px) {.sec-inner { padding: 72px 24px; }
+
+      .stats-row  { grid-template-columns: 1fr; }
+      .skills-grid { grid-template-columns: 1fr; }
+      .edu-grid   { grid-template-columns: 1fr; }
+      .lang-grid  { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; max-width: 360px; }
+
+      .timeline::before { display: none; }
+      .t-item { flex-direction: column; gap: 14px; }
+      .t-dot-col { display: none; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-name { font-size: 56px; }
+      .photo-wrap { width: 240px; height: 240px; }
+      .ring-outer { width: 304px; height: 304px; top: -32px; left: -32px; }
+      .ring-inner { width: 262px; height: 262px; top: -11px; left: -11px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="progress-bar"></div>
+
+  <!-- ══════════════════════════════
+       NAVBAR
+  ══════════════════════════════ -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <span class="logo-text">RKS</span>
+        <span class="logo-sub">Cameraman</span>
+      </div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home"       class="nav-link">Home</a></li>
+        <li><a href="#about"      class="nav-link">About</a></li>
+        <li><a href="#experience" class="nav-link">Experience</a></li>
+        <li><a href="#skills"     class="nav-link">Skills</a></li>
+        <li><a href="#education"  class="nav-link">Education</a></li>
+        <li><a href="#contact"    class="nav-link">Contact</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════
+       HERO
+  ══════════════════════════════ -->
+  <section id="home" class="hero">
+    <div class="hero-inner">
+
+      <!-- Left: Content -->
+      <div class="reveal">
+        <p class="hero-eyebrow">✦ &nbsp; Visual Media Professional</p>
+        <h1 class="hero-name">
+          ROHITH<br>KUMAR<br><em>SINGH</em>
+        </h1>
+        <div class="hero-typing">
+          <span class="hero-iam">I&nbsp;AM&nbsp;A&nbsp;</span>
+          <span class="typed-word" id="typedWord"></span>
+          <span class="cursor-blink"></span>
+        </div>
+        <p class="hero-bio">
+          Capturing compelling visuals for media and journalism projects across India.
+          Specialized in camera operation, lighting, and on-location production.
+        </p>
+        <div class="hero-btns">
+          <a href="#experience" class="btn-gold">View My Work</a>
+          <a href="#contact"    class="btn-outline">Contact Me</a>
+        </div>
+        <div class="hero-mini-stats">
+          <div class="hms-item">
+            <span class="hms-num">3+</span>
+            <span class="hms-lbl">Companies</span>
+          </div>
+          <div class="hms-item">
+            <span class="hms-num">9+</span>
+            <span class="hms-lbl">Months Exp.</span>
+          </div>
+          <div class="hms-item">
+            <span class="hms-num">3</span>
+            <span class="hms-lbl">Languages</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Photo with rotating lens rings -->
+      <div class="hero-photo-side reveal reveal-d2">
+        <div class="photo-wrap">
+
+          <!-- Outer rotating aperture ring -->
+          <svg class="ring-outer" viewBox="0 0 380 380" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="190" cy="190" r="180" stroke="#c9a84c" stroke-width="1"
+              fill="none" stroke-dasharray="8 14" opacity="0.45"/>
+            <circle cx="190" cy="190" r="172" stroke="#c9a84c" stroke-width="0.5"
+              fill="none" stroke-dasharray="2 30" opacity="0.25"/>
+            <circle cx="190" cy="190" r="186" stroke="#c9a84c" stroke-width="1.5"
+              fill="none" stroke-dasharray="1 37" opacity="0.55"/>
+          </svg>
+
+          <!-- Inner counter-rotating ring -->
+          <svg class="ring-inner" viewBox="0 0 326 326" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="163" cy="163" r="155" stroke="#c9a84c" stroke-width="0.8"
+              fill="none" stroke-dasharray="4 22" opacity="0.3"/>
+            <circle cx="163" cy="163" r="160" stroke="#c9a84c" stroke-width="0.4"
+              fill="none" stroke-dasharray="1 14" opacity="0.2"/>
+          </svg>
+
+          <!-- Photo -->
+          <div class="photo-circle">
+            <img
+              src="Screenshot_2026-07-05-10-15-18-390_com.whatsapp.jpg"
+              alt="Rohith Kumar Singh"
+              class="profile-photo"
+            >
+          </div>
+
+          <!-- Camera emoji badge -->
+          <div class="cam-badge">🎥</div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <div class="scroll-hint">
+      <div class="scroll-chevron"></div>
+      Scroll
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════
+       ABOUT
+  ══════════════════════════════ -->
+  <section id="about" class="sec sec-deep">
+    <div class="sec-inner">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Who I Am</span>
+        <h2 class="sec-title">About Me</h2>
+      </div>
+      <div class="about-grid">
+
+        <!-- Left: Bio + details -->
+        <div class="reveal">
+          <p class="about-lead">
+            A skilled Cameraman with expertise in capturing compelling visuals for
+            media and journalism projects. Proven ability to collaborate with production
+            teams to create high-quality content across studio and field environments.
+          </p>
+          <div class="detail-list">
+            <div class="detail-row">
+              <span class="d-icon">📞</span>
+              <div>
+                <div class="d-label">Phone</div>
+                <div class="d-val">+91 84919 12306</div>
+              </div>
+            </div>
+            <div class="detail-row">
+              <span class="d-icon">✉️</span>
+              <div>
+                <div class="d-label">Email</div>
+                <div class="d-val">kumarsinghrohitrajput@gamil.com</div>
+              </div>
+            </div>
+            <div class="detail-row">
+              <span class="d-icon">📍</span>
+              <div>
+                <div class="d-label">Current Address</div>
+                <div class="d-val">Neb Sarai, Khasra No.322, House No.84, New Delhi – 1100</div>
+              </div>
+            </div>
+            <div class="detail-row">
+              <span class="d-icon">🏡</span>
+              <div>
+                <div class="d-label">Permanent Address</div>
+                <div class="d-val">Vill. Khawajepur, PO Yadapur, Dist. Gopalganj, Bihar – 841428</div>
+              </div>
+            </div>
+            <div class="detail-row">
+              <span class="d-icon">🗣️</span>
+              <div>
+                <div class="d-label">Languages</div>
+                <div class="d-val">English &nbsp;•&nbsp; Hindi &nbsp;•&nbsp; Bhojpuri</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Stats -->
+        <div class="reveal reveal-d2">
+          <div class="stats-row">
+            <div class="stat-box">
+              <span class="stat-num" data-target="3">0</span>
+              <span class="stat-lbl">Companies<br>Worked With</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-num" data-target="9">0</span>
+              <span class="stat-lbl">Months of<br>Experience</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-num" data-target="3">0</span>
+              <span class="stat-lbl">Languages<br>Spoken</span>
+            </div>
+          </div>
+          <div class="detail-row" style="margin-top:4px;">
+            <span class="d-icon">🎯</span>
+            <div>
+              <div class="d-label">Specialization</div>
+              <div class="d-val">Media & Journalism Cinematography, Studio & Field Production</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════
+       EXPERIENCE
+  ══════════════════════════════ -->
+  <section id="experience" class="sec sec-dark">
+    <div class="sec-inner">
+      <div class="sec-head reveal">
+        <span class="eyebrow">My Journey</span>
+        <h2 class="sec-title">Experience</h2>
+      </div>
+      <div class="timeline">
+
+        <div class="t-item reveal">
+          <div class="t-dot-col">
+            <div class="t-dot">🎬</div>
+          </div>
+          <div class="t-card">
+            <div class="t-top">
+              <div>
+                <h3 class="t-company">Shiya Film</h3>
+                <p class="t-role">Camera Department</p>
+              </div>
+              <span class="t-date">Mar 2024 – Jun 2024</span>
+            </div>
+            <p class="t-desc">
+              Over 3 months of camera department experience, assisting in camera setup,
+              lens changes, and shot execution for film productions.
+            </p>
+            <div class="tags">
+              <span class="tag">Camera Setup</span>
+              <span class="tag">Lens Changes</span>
+              <span class="tag">Shot Execution</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="t-item reveal">
+          <div class="t-dot-col">
+            <div class="t-dot">🎥</div>
+          </div>
+          <div class="t-card">
+            <div class="t-top">
+              <div>
+                <h3 class="t-company">Nipun Films</h3>
+                <p class="t-role">Camera Assistant – OTN Project</p>
+              </div>
+              <span class="t-date">Jun 2024 – Aug 2024</span>
+            </div>
+            <p class="t-desc">
+              Over 2 months of camera experience supporting the cameraman, equipment
+              setup, and on-location shoots. Collaborated with the OTN team to ensure
+              visual consistency and efficient production flow.
+            </p>
+            <div class="tags">
+              <span class="tag">On-Location Shoots</span>
+              <span class="tag">Equipment Setup</span>
+              <span class="tag">OTN Project</span>
+              <span class="tag">Visual Consistency</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="t-item reveal">
+          <div class="t-dot-col">
+            <div class="t-dot">📡</div>
+          </div>
+          <div class="t-card">
+            <div class="t-top">
+              <div>
+                <h3 class="t-company">I TV</h3>
+                <p class="t-role">Camera Operator</p>
+              </div>
+              <span class="t-date">4 Months</span>
+            </div>
+            <p class="t-desc">
+              Handled studio and field camera setups, coordinated with production teams,
+              and ensured smooth technical execution during live and recorded segments.
+            </p>
+            <div class="tags">
+              <span class="tag">Studio Setup</span>
+              <span class="tag">Field Production</span>
+              <span class="tag">Live Segments</span>
+              <span class="tag">Team Coordination</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════
+       SKILLS
+  ══════════════════════════════ -->
+  <section id="skills" class="sec sec-deep">
+    <div class="sec-inner">
+      <div class="sec-head reveal">
+        <span class="eyebrow">What I Do</span>
+        <h2 class="sec-title">Skills</h2>
+      </div>
+      <div class="skills-grid" id="skillsGrid">
+
+        <div class="skill-card reveal">
+          <div class="sk-top">
+            <div class="sk-left"><span class="sk-icon">🎬</span><span class="sk-name">Camera Movement</span></div>
+            <span class="sk-pct">90%</span>
+          </div>
+          <div class="sk-bar"><div class="sk-fill" data-width="90"></div></div>
+        </div>
+
+        <div class="skill-card reveal reveal-d1">
+          <div class="sk-top">
+            <div class="sk-left"><span class="sk-icon">💡</span><span class="sk-name">Lighting</span></div>
+            <span class="sk-pct">85%</span>
+          </div>
+          <div class="sk-bar"><div class="sk-fill" data-width="85"></div></div>
+        </div>
+
+        <div class="skill-card reveal">
+          <div class="sk-top">
+            <div class="sk-left"><span class="sk-icon">🤝</span><span class="sk-name">Teamwork</span></div>
+            <span class="sk-pct">92%</span>
+          </div>
+          <div class="sk-bar"><div class="sk-fill" data-width="92"></div></div>
+        </div>
+
+        <div class="skill-card reveal reveal-d1">
+          <div class="sk-top">
+            <div class="sk-left"><span class="sk-icon">🔄</span><span class="sk-name">Adaptability</span></div>
+            <span class="sk-pct">88%</span>
+          </div>
+          <div class="sk-bar"><div class="sk-fill" data-width="88"></div></div>
+        </div>
+
+        <div class="skill-card reveal">
+          <div class="sk-top">
+            <div class="sk-left"><span class="sk-icon">📱</span><span class="sk-name">Digital Marketing</span></div>
+            <span class="sk-pct">75%</span>
+          </div>
+          <div class="sk-bar"><div class="sk-fill" data-width="75"></div></div>
+        </div>
+
+        <div class="skill-card reveal reveal-d1">
+          <div class="sk-top">
+            <div class="sk-left"><span class="sk-icon">👑</span><span class="sk-name">Leadership</span></div>
+            <span class="sk-pct">80%</span>
+          </div>
+          <div class="sk-bar"><div class="sk-fill" data-width="80"></div></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════
+       EDUCATION
+  ══════════════════════════════ -->
+  <section id="education" class="sec sec-dark">
+    <div class="sec-inner">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Background</span>
+        <h2 class="sec-title">Education</h2>
+      </div>
+
+      <div class="edu-grid">
+        <div class="edu-card reveal">
+          <div class="edu-icon">🎓</div>
+          <div>
+            <p class="edu-badge">Higher Education</p>
+            <h3 class="edu-school">Kamala Rai College</h3>
+            <p class="edu-loc">Gopalganj, Bihar</p>
+          </div>
+        </div>
+        <div class="edu-card reveal reveal-d2">
+          <div class="edu-icon">📚</div>
+          <div>
+            <p class="edu-badge">Secondary Education</p>
+            <h3 class="edu-school">D.G. High School</h3>
+            <p class="edu-loc">Dumriya, Gopalganj, Bihar</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Languages -->
+      <div class="lang-section reveal">
+        <h3 class="lang-heading">Languages</h3>
+        <div class="lang-grid">
+          <div class="lang-card">
+            <div class="lang-flag">🇬🇧</div>
+            <p class="lang-name">English</p>
+            <div class="lang-pips">
+              <div class="pip on"></div><div class="pip on"></div>
+              <div class="pip on"></div><div class="pip on"></div>
+              <div class="pip"></div>
+            </div>
+          </div>
+          <div class="lang-card">
+            <div class="lang-flag">🇮🇳</div>
+            <p class="lang-name">Hindi</p>
+            <div class="lang-pips">
+              <div class="pip on"></div><div class="pip on"></div>
+              <div class="pip on"></div><div class="pip on"></div>
+              <div class="pip on"></div>
+            </div>
+          </div>
+          <div class="lang-card">
+            <div class="lang-flag">🎙️</div>
+            <p class="lang-name">Bhojpuri</p>
+            <div class="lang-pips">
+              <div class="pip on"></div><div class="pip on"></div>
+              <div class="pip on"></div><div class="pip on"></div>
+              <div class="pip on"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════
+       CONTACT
+  ══════════════════════════════ -->
+  <section id="contact" class="sec sec-deep">
+    <div class="sec-inner">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Get In Touch</span>
+        <h2 class="sec-title">Contact</h2>
+      </div>
+      <div class="contact-grid">
+
+        <div class="contact-card reveal">
+          <div class="cc-icon-wrap">📞</div>
+          <p class="cc-type">Phone</p>
+          <p class="cc-val">+91 84919 12306</p>
+        </div>
+
+        <div class="contact-card reveal reveal-d1">
+          <div class="cc-icon-wrap">✉️</div>
+          <p class="cc-type">Email</p>
+          <p class="cc-val">kumarsinghrohitrajput<br>@gamil.com</p>
+        </div>
+
+        <div class="contact-card reveal reveal-d2">
+          <div class="cc-icon-wrap">📍</div>
+          <p class="cc-type">Location</p>
+          <p class="cc-val">Neb Sarai, New Delhi<br>Gopalganj, Bihar</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════
+       FOOTER
+  ══════════════════════════════ -->
+  <footer class="footer">
+    <p class="footer-name">ROHITH KUMAR SINGH</p>
+    <p class="footer-tagline">Cameraman &nbsp;·&nbsp; Visual Storyteller &nbsp;·&nbsp; Media Professional</p>
+    <ul class="footer-nav">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <p class="footer-copy">© 2024 Rohith Kumar Singh. All rights reserved.</p>
+  </footer>
+
+  <!-- ══════════════════════════════
+       JAVASCRIPT
+  ══════════════════════════════ -->
+  <script>
+    /* ── Typing Animation ── */
+    const typedEl = document.getElementById('typedWord');
+    const words = ['Cameraman', 'Cinematographer', 'Visual Storyteller', 'Media Professional'];
+    let wi = 0, ci = 0, deleting = false;
+
+    function typeLoop() {
+      const word = words[wi];
+      if (!deleting) {
+        typedEl.textContent = word.slice(0, ci + 1);
+        ci++;
+        if (ci === word.length) {
+          deleting = true;
+          setTimeout(typeLoop, 1900);
+          return;
+        }
+      } else {
+        typedEl.textContent = word.slice(0, ci - 1);
+        ci--;
+        if (ci === 0) {
+          deleting = false;
+          wi = (wi + 1) % words.length;
+        }
+      }
+      setTimeout(typeLoop, deleting ? 52 : 95);
+    }
+    typeLoop();
+
+    /* ── Scroll Progress Bar ── */
+    const bar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => {
+      const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 100;
+      bar.style.width = pct + '%';
+    }, { passive: true });
+
+    /* ── Navbar scroll style ── */
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+    }, { passive: true });
+
+    /* ── Active nav link spy ── */
+    const sections  = document.querySelectorAll('section[id]');
+    const navLinks  = document.querySelectorAll('.nav-link');
+
+    function updateActive() {
+      let current = '';
+      sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 220) current = s.id;
+      });
+      navLinks.forEach(l => {
+        l.classList.toggle('active', l.getAttribute('href') === '#' + current);
+      });
+    }
+    window.addEventListener('scroll', updateActive, { passive: true });
+    updateActive();
+
+    /* ── Hamburger menu ── */
+    const burger    = document.getElementById('hamburger');
+    const navList   = document.getElementById('navLinks');
+
+    burger.addEventListener('click', () => {
+      burger.classList.toggle('open');
+      navList.classList.toggle('open');
+    });
+    navList.querySelectorAll('.nav-link').forEach(l => {
+      l.addEventListener('click', () => {
+        burger.classList.remove('open');
+        navList.classList.remove('open');
+      });
+    });
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 768) {
+        burger.classList.remove('open');
+        navList.classList.remove('open');
+      }
+    });
+
+    /* ── Scroll Reveal ── */
+    const revealObs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in-view'); });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+    /* ── Skill Bar Fill ── */
+    const skillObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.querySelectorAll('.sk-fill').forEach(f => {
+            setTimeout(() => { f.style.width = f.dataset.width + '%'; }, 150);
+          });
+        }
+      });
+    }, { threshold: 0.3 });
+    const sg = document.getElementById('skillsGrid');
+    if (sg) skillObs.observe(sg);
+
+    /* ── Stat Counters ── */
+    const counterObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.querySelectorAll('.stat-num[data-target]').forEach(el => {
+            const target = +el.dataset.target;
+            let cur = 0;
+            const step = target / 45;
+            const t = setInterval(() => {
+              cur += step;
+              if (cur >= target) { cur = target; clearInterval(t); }
+              el.textContent = Math.round(cur) + '+';
+            }, 32);
+          });
+          counterObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.4 });
+    const aboutSec = document.querySelector('#about');
+    if (aboutSec) counterObs.observe(aboutSec);
+  </script>
+
+</body>
+</html>
